@@ -1,6 +1,10 @@
+import { useState } from "react";
 import "./AddTodoModal.css";
 
 function AddTodoModal({ onClose }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [isImportant, setIsImportant] = useState(false);
   return (
     <div id="modal-screen">
       <div className="modal-content">
@@ -9,24 +13,32 @@ function AddTodoModal({ onClose }) {
             ایجاد برنامه جدید
           </span>
           <div className="btns *:size-3.5 *:cursor-pointer *:rounded-full">
-            <button id="modal-close-button" onClick={onClose}>
-              
-            </button>
+            <button id="modal-close-button" onClick={onClose}></button>
           </div>
         </header>
         <main className="my-5 space-y-3">
           <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            name="title"
             placeholder="عنوان تسک را وارد نمائید ..."
             className="input-element title-input"
           />
 
           <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="input-element description-input"
             placeholder="توضیحات تسک را وارد نمائید ..."
             name="description"
           ></textarea>
           <div className="my-3 flex items-center gap-2">
-            <input id="is-important" type="checkbox" />
+            <input
+              checked={isImportant}
+              onChange={(e) => setIsImportant(e.target.checked)}
+              id="is-important"
+              type="checkbox"
+            />
             <label for="is-important"> مهم </label>
           </div>
           <div className="info-message">
