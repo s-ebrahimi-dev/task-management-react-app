@@ -8,6 +8,20 @@ import AddTodoModal from "./components/AddTodoModal/AddTodoModal";
 function App() {
 
 const [isModalOpen, setIsModalOpen] = useState(false);
+  const [todos, setTodos] = useState([]);
+
+  const addTodo = (title, description, isImportant) => {
+    
+    const newTodo = {
+      id: crypto.randomUUID,
+      title,
+      description,
+      isImportant,
+      isComplete: false,
+    }
+
+    setTodos([...todos, newTodo])
+  }
 
   return (
 
@@ -78,7 +92,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
         </section>
       </main>
 
-      {isModalOpen && <AddTodoModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <AddTodoModal onClose={() => setIsModalOpen(false)} addTodoHandler={addTodo} />}
 
       <Footer />
     </>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./AddTodoModal.css";
 
-function AddTodoModal({ onClose }) {
+function AddTodoModal({ onClose, addTodoHandler }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isImportant, setIsImportant] = useState(false);
@@ -53,7 +53,7 @@ function AddTodoModal({ onClose }) {
           </div>
         </main>
         <footer className="mt-5 flex items-center justify-end text-sm pb-3">
-          <button id="create-button">ایجاد کنید</button>
+          <button id="create-button" onClick={()=>{addTodoHandler(title,description, isImportant,)}}>ایجاد کنید</button>
         </footer>
       </div>
     </div>
