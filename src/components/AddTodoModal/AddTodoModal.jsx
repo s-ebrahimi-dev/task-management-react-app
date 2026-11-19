@@ -1,6 +1,6 @@
 import "./AddTodoModal.css";
 
-function AddTodoModal() {
+function AddTodoModal({ onClose }) {
   return (
     <div id="modal-screen">
       <div className="modal-content">
@@ -9,7 +9,9 @@ function AddTodoModal() {
             ایجاد برنامه جدید
           </span>
           <div className="btns *:size-3.5 *:cursor-pointer *:rounded-full">
-            <button id="modal-close-button"></button>
+            <button id="modal-close-button" onClick={onClose}>
+              
+            </button>
           </div>
         </header>
         <main className="my-5 space-y-3">

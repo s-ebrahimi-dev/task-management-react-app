@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
@@ -5,7 +6,11 @@ import Todo from "./components/Todo/Todo";
 import AddTodoModal from "./components/AddTodoModal/AddTodoModal";
 
 function App() {
+
+const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
+
     <>
       <Header />
 
@@ -51,7 +56,7 @@ function App() {
               </div>
             </div>
 
-            <button id="open-dialog" cla>
+            <button id="open-dialog" className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
               <span> ایجاد جدید </span>
               <div className="btn-divider"></div>
               <span>
@@ -73,7 +78,7 @@ function App() {
         </section>
       </main>
 
-      {/* <AddTodoModal /> */}
+      {isModalOpen && <AddTodoModal onClose={() => setIsModalOpen(false)} />}
 
       <Footer />
     </>
