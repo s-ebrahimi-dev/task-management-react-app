@@ -21,6 +21,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
     }
 
     setTodos([...todos, newTodo])
+    setIsModalOpen(false)
   }
 
   return (
@@ -83,7 +84,9 @@ const [isModalOpen, setIsModalOpen] = useState(false);
         <section id="tasks" className="space-y-30 mt-5">
           <div className="space-y-5">
             <p className="text-sm">تسک های موجود:</p>
-            <Todo />
+            {todos.map((todo) => (
+             <Todo key={todo.id} {...todo}/>
+           ))}
           </div>
           <div className="space-y-5">
             <p className="text-sm">تسک‌های تکمیل‌شده</p>
