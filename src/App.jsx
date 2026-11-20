@@ -9,6 +9,7 @@ import NoTodo from "./components/NoTodo/NoTodo";
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   const addTodo = (title, description, isImportant) => {
     const newTodo = {
@@ -39,6 +40,14 @@ function App() {
     const updatedTodo = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodo);
   };
+
+  const filteredTodos = () => {
+    if (filter === "all") return todos;
+    if (filter === "completed") return todos.filter((todo) => todo.isComplete);
+    if (filter === "not-completed")
+      return todos.filter((todo) => !todo.isComplete);
+  };
+
   return (
     <>
       <Header />
@@ -63,23 +72,39 @@ function App() {
               <input id="dd-toggle" type="checkbox" hidden />
 
               <label className="dd-btn" htmlFor="dd-toggle">
-                <span>نمایش فقط</span>
+                <span>
+                  نمایش {" "}
+                  {filter === "all"
+                    ? "همه"
+                    : filter === "completed"
+                      ? "تکمیل شده ها"
+                      : "تکمیل نشده ها"}
+                </span>
                 <i className="fa-solid fa-chevron-down"></i>
               </label>
 
               <div className="dropdown_menu" role="menu">
-                <div className="dropdown-label">
-                  <p className="text-start text-xs opacity-60">نمایش فقط</p>
-                </div>
                 <div className="py-1">
-                  <label htmlFor="dd-toggle" className="menu-item">
+                  <label
+                    htmlFor="dd-toggle"
+                    className="menu-item"
+                    onClick={() => setFilter("all")}
+                  >
                     همه
                   </label>
-                  <label htmlFor="dd-toggle" className="menu-item">
+                  <label
+                    htmlFor="dd-toggle"
+                    className="menu-item"
+                    onClick={() => setFilter("completed")}
+                  >
                     تکمیل شده ها
                   </label>
-                  <label htmlFor="dd-toggle" className="menu-item">
-                    در انتظار انجام
+                  <label
+                    htmlFor="dd-toggle"
+                    className="menu-item"
+                    onClick={() => setFilter("not-completed")}
+                  >
+                    تکمیل نشده ها
                   </label>
                 </div>
               </div>
@@ -102,7 +127,7 @@ function App() {
           <section id="tasks" className="space-y-30 mt-5">
             <div className="space-y-5">
               <p className="text-sm">تسک های موجود:</p>
-              {todos.map((todo) => (
+              {filteredTodos().map((todo) => (
                 <Todo
                   key={todo.id}
                   {...todo}
@@ -113,16 +138,20 @@ function App() {
             </div>
             <div className="space-y-5">
               <p className="text-sm">تسک‌های تکمیل‌شده</p>
-              {todos
-                .filter((todo) => todo.isComplete)
-                .map((todo) => (
-                  <Todo
-                    key={todo.id}
-                    {...todo}
-                    onDo={doTodo}
-                    onRemove={removeTodo}
-                  />
-                ))}
+              {todos.filter((todo) => todo.isComplete).length ? (
+                todos
+                  .filter((todo) => todo.isComplete)
+                  .map((todo) => (
+                    <Todo
+                      key={todo.id}
+                      {...todo}
+                      onDo={doTodo}
+                      onRemove={removeTodo}
+                    />
+                  ))
+              ) : (
+                <NoTodo />
+              )}
             </div>
           </section>
         ) : (
