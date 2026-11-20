@@ -4,35 +4,49 @@ import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Todo from "./components/Todo/Todo";
 import AddTodoModal from "./components/AddTodoModal/AddTodoModal";
+import NoTodo from "./components/NoTodo/NoTodo";
 
 function App() {
-
-const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [todos, setTodos] = useState([]);
 
   const addTodo = (title, description, isImportant) => {
-    
     const newTodo = {
-      id: crypto.randomUUID,
+      id: crypto.randomUUID(),
       title,
       description,
       isImportant,
       isComplete: false,
-    }
+    };
 
-    setTodos([...todos, newTodo])
-    setIsModalOpen(false)
-  }
+    setTodos([...todos, newTodo]);
+    setIsModalOpen(false);
+  };
 
+  const doTodo = (id) => {
+    const updatedTodo = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isComplete = true;
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodo);
+  };
+
+  const removeTodo = (id) => {
+    const updatedTodo = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodo);
+  };
   return (
-
     <>
       <Header />
 
       <main className="container pb-25">
         <div id="headline" className="space-y-3">
           <h1 className="title">
-            <img src="./public/images/hourglass.png" className="size-8" />
+            <img src="/images/hourglass.png" className="size-8" />
             <span> مدیریت و برنامه ریزی </span>
           </h1>
           <p className="max-w-[750px] text-zinc-700 text-sm font-Vazir-Medium!">
@@ -48,7 +62,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             <div className="dropdown">
               <input id="dd-toggle" type="checkbox" hidden />
 
-              <label className="dd-btn" for="dd-toggle">
+              <label className="dd-btn" htmlFor="dd-toggle">
                 <span>نمایش فقط</span>
                 <i className="fa-solid fa-chevron-down"></i>
               </label>
@@ -58,20 +72,24 @@ const [isModalOpen, setIsModalOpen] = useState(false);
                   <p className="text-start text-xs opacity-60">نمایش فقط</p>
                 </div>
                 <div className="py-1">
-                  <label for="dd-toggle" className="menu-item">
+                  <label htmlFor="dd-toggle" className="menu-item">
                     همه
                   </label>
-                  <label for="dd-toggle" className="menu-item">
+                  <label htmlFor="dd-toggle" className="menu-item">
                     تکمیل شده ها
                   </label>
-                  <label for="dd-toggle" className="menu-item">
+                  <label htmlFor="dd-toggle" className="menu-item">
                     در انتظار انجام
                   </label>
                 </div>
               </div>
             </div>
 
-            <button id="open-dialog" className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+            <button
+              id="open-dialog"
+              className="btn btn-primary"
+              onClick={() => setIsModalOpen(true)}
+            >
               <span> ایجاد جدید </span>
               <div className="btn-divider"></div>
               <span>
@@ -80,22 +98,44 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             </button>
           </div>
         </div>
-
-        <section id="tasks" className="space-y-30 mt-5">
-          <div className="space-y-5">
-            <p className="text-sm">تسک های موجود:</p>
-            {todos.map((todo) => (
-             <Todo key={todo.id} {...todo}/>
-           ))}
-          </div>
-          <div className="space-y-5">
-            <p className="text-sm">تسک‌های تکمیل‌شده</p>
-            <Todo />
-          </div>
-        </section>
+        {todos.length ? (
+          <section id="tasks" className="space-y-30 mt-5">
+            <div className="space-y-5">
+              <p className="text-sm">تسک های موجود:</p>
+              {todos.map((todo) => (
+                <Todo
+                  key={todo.id}
+                  {...todo}
+                  onDo={doTodo}
+                  onRemove={removeTodo}
+                />
+              ))}
+            </div>
+            <div className="space-y-5">
+              <p className="text-sm">تسک‌های تکمیل‌شده</p>
+              {todos
+                .filter((todo) => todo.isComplete)
+                .map((todo) => (
+                  <Todo
+                    key={todo.id}
+                    {...todo}
+                    onDo={doTodo}
+                    onRemove={removeTodo}
+                  />
+                ))}
+            </div>
+          </section>
+        ) : (
+          <NoTodo />
+        )}
       </main>
 
-      {isModalOpen && <AddTodoModal onClose={() => setIsModalOpen(false)} addTodoHandler={addTodo} />}
+      {isModalOpen && (
+        <AddTodoModal
+          onClose={() => setIsModalOpen(false)}
+          addTodoHandler={addTodo}
+        />
+      )}
 
       <Footer />
     </>

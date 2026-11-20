@@ -44,7 +44,7 @@ function AddTodoModal({ onClose, addTodoHandler }) {
           <div className="info-message">
             <p className="inline-flex! items-center gap-1">
               <img
-                src="./public/images/check.png"
+                src="/images/check.png"
                 alt="Checked"
                 className="size-4"
               />
